@@ -1,9 +1,9 @@
 #!/usr/bin/python3
-
-'''Functions to comput pascal traingle'''
+"""Functions to comput pascal traingle"""
 
 
 def pascal_triangle(n):
+    '''Pascal traingle function'''
     if n <= 0:
         return []
 
