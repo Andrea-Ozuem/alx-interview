@@ -15,8 +15,9 @@ def canUnlockAll(boxes):
     boxs = boxes[:]
     for n in range(1, len(boxs)):
         for i in range(len(boxs)):
-            if n in boxs[i] and n != i:
+            if n in boxs[i] and 'taken' not in boxs[i]:
                 # n can be unlocked
+                boxs[i].append('taken')
                 break
             if i == len(boxs) - 1:
                 return False
