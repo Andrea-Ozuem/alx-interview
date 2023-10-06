@@ -1,0 +1,8 @@
+for n=1 to last box
+     for j = 0 to last box
+         if n in jth box and taken not in jth box
+              //n is unlocked
+              append 'taken' to jth box
+              break
+         if j == last box and n not in last box
+             return false
