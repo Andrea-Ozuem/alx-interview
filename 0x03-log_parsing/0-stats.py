@@ -25,7 +25,7 @@ try:
         if count % 10 == 0:
             # print stat
             print('File size: {:d}'.format(total))
-            for key, val in codes.items():
+            for key, val in sorted(codes.items()):
                 if val > 0:
                     print('{}: {}'.format(key, val))
 except KeyboardInterrupt:
