@@ -18,12 +18,12 @@ if __name__ == '__main__':
                 print("{}: {}".format(k, v))
     try:
         for line in sys.stdin:
+            count += 1
             line = line.rstrip()
             match = re.fullmatch(pattern, line)
             if not match:
                 continue
             code, fs = match.groups()[-2], match.groups()[-1]
-            count += 1
             total += int(fs)
             code = int(code)
             if code not in codes:
