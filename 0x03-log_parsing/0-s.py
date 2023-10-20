@@ -11,18 +11,17 @@ pattern = r'^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - (\[.*\])'\
 
 try:
     for line in sys.stdin:
+        line = line.rstrip()
+        match = re.fullmatch(pattern, line)
+        if not match:
+            continue
+        code, fs = match.groups()[-2], match.groups()[-1]
         count += 1
-        line = line.split()
-        try:
-            code = int(line[-2])
-            if code in codes:
-                codes[code] += 1
-        except BaseException:
-            pass
-        try:
-            total += int(line[-1])
-        except BaseException:
-            pass
+        total += int(fs)
+        code = int(code)
+        if code not in codes:
+            continue
+        codes[code] += 1
         if count % 10 == 0:
             print('File size: {:d}'.format(total))
             for key, val in sorted(codes.items()):
