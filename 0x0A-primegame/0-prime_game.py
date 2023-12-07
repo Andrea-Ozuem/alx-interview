@@ -8,6 +8,8 @@ def isWinner(x, nums):
     You can assume n and x will not be larger than 10000
     Return: name of the player that won the most rounds
     '''
+    if x != len(nums):
+        return None
     ben = maria = 1
 
     # flag indicates turn: 0 - M; 1 - B
