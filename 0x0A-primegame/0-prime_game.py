@@ -1,69 +1,60 @@
 #!/usr/bin/python3
-'Prime Game'
-
-
-def findMultiples(num, goal):
-    '''
-    Finds multiples of a given number within a list
-    '''
-    for i in goal:
-        if i % num == 0:
-            goal.remove(i)
-    return goal
-
-
-def isPrime(i):
-    '''
-    Check if a number is prime.
-    '''
-    if i == 1:
-        return False
-    for j in range(2, i):
-        if i % j == 0:
-            return False
-    return True
-
-
-def getPrimes(n):
-    '''
-    Dispatch a given set into prime numbers and non-prime numbers.
-    '''
-    counter = 0
-    arr = list(n)
-    for i in range(1, len(arr) + 1):
-        if isPrime(i):
-            counter += 1
-            arr.remove(i)
-            arr = findMultiples(i, arr)
-        else:
-            pass
-    return counter
+"""Prime Game. This code
+"""
 
 
 def isWinner(x, nums):
-    '''
-    Maria and Ben are playing a game. Given a set of consecutive integers
-    determine who the winner of each game is.
-    '''
-    players = {'Maria': 0, 'Ben': 0}
-    cluster = set()
-    for elem in range(x):
-        nums.sort()
-        num = nums[elem]
-        for i in range(1, num + 1):
-            cluster.add(i)
-            if i == num + 1:
-                break
-        temp = getPrimes(cluster)
+    """Main Prime game function. Determine the winner.
+    """
+    try:
+        assert x and type(x) == int and x > 0
+        if x >= 10000:  # do not exceed 1000 rounds
+            return "Maria"
+        assert nums and type(nums) == list and len(nums) != 0
+        for n in nums:
+            assert type(n) == int  # n can be 0, in which case round skipped
+    except Exception:
+        return None
 
-        if temp % 2 == 0:
-            players['Ben'] += 1
-        elif temp % 2 != 0:
-            players['Maria'] += 1
+    def is_prime(n):
+        """Helper function 1
+        """
+        if n < 2:
+            return False
+        for i in range(2, int(n ** 0.5) + 1):
+            if n % i == 0:
+                return False
+        return True
 
-    if players['Maria'] > players['Ben']:
-        return 'Maria'
-    elif players['Maria'] < players['Ben']:
-        return 'Ben'
+    def game(n):
+        """Helper function to determine who wins the round.
+        """
+        primes = [i for i in range(1, n + 1) if is_prime(i)]
+        non_primes = [i for i in range(1, n + 1) if not is_prime(i)]
+
+        turn = "Maria"
+        while primes:
+            prime = primes[0]
+            primes = [p for p in primes if p % prime != 0]
+            non_primes = [np for np in non_primes if np % prime != 0]
+
+            if primes or non_primes:
+                turn = "Ben" if turn == "Maria" else "Maria"
+            else:
+                return turn
+        return "Ben" if turn == "Maria" else "Maria"
+    marias = 0
+    bens = 0
+    for n in nums:
+        winner = game(n)
+        if winner == "Maria":
+            marias += 1
+        else:
+            bens += 1
+
+    if marias > bens:
+        return "Maria"
+    elif bens > marias:
+        return "Ben"
     else:
         return None
