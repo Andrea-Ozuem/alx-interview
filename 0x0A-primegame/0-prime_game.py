@@ -2,70 +2,68 @@
 'Prime Game'
 
 
-def isWinner(x, nums):
-    '''Prime Game Algorithm
-    :nums is an array of n
-    You can assume n and x will not be larger than 10000
-    Return: name of the player that won the most rounds
+def findMultiples(num, goal):
     '''
-    if x != len(nums):
-        return None
-    ben = maria = 1
+    Finds multiples of a given number within a list
+    '''
+    for i in goal:
+        if i % num == 0:
+            goal.remove(i)
+    return goal
 
-    # flag indicates turn: 0 - M; 1 - B
-    for n in nums:
-        current = set(range(1, n + 1))
-        flag = 0
-        while True:
-            primes = getPrimeList(current)
-            if not primes:
-                break
-            multiples = getMultiples(list(primes)[0], current)
-            current = current - multiples
-            if flag == 0:
-                flag = 1
-            else:
-                flag = 0
-        if flag == 0:
-            maria -= 1
+
+def isPrime(i):
+    '''
+    Check if a number is prime.
+    '''
+    if i == 1:
+        return False
+    for j in range(2, i):
+        if i % j == 0:
+            return False
+    return True
+
+
+def getPrimes(n):
+    '''
+    Dispatch a given set into prime numbers and non-prime numbers.
+    '''
+    counter = 0
+    arr = list(n)
+    for i in range(1, len(arr) + 1):
+        if isPrime(i):
+            counter += 1
+            arr.remove(i)
+            arr = findMultiples(i, arr)
         else:
-            ben -= 1
+            pass
+    return counter
 
-    if ben > maria:
-        return 'Ben'
-    elif maria > ben:
+
+def isWinner(x, nums):
+    '''
+    Maria and Ben are playing a game. Given a set of consecutive integers
+    determine who the winner of each game is.
+    '''
+    players = {'Maria': 0, 'Ben': 0}
+    cluster = set()
+    for elem in range(x):
+        nums.sort()
+        num = nums[elem]
+        for i in range(1, num + 1):
+            cluster.add(i)
+            if i == num + 1:
+                break
+        temp = getPrimes(cluster)
+
+        if temp % 2 == 0:
+            players['Ben'] += 1
+        elif temp % 2 != 0:
+            players['Maria'] += 1
+
+    if players['Maria'] > players['Ben']:
         return 'Maria'
+    elif players['Maria'] < players['Ben']:
+        return 'Ben'
     else:
         return None
-
-
-def getMultiples(n, arr):
-    '''Gets all multiples of n in arr'''
-    multiples = set()
-    for i in arr:
-        if i % n == 0:
-            multiples.add(i)
-    return multiples
-
-
-def getPrimeList(arr):
-    '''Gets all prime numbers between 1 and n'''
-    primes = set()
-    flag = 0
-    for i in arr:
-        # Skip 1 as1 is neither prime nor composite
-        if (i == 1):
-            continue
-        # flag variable to tell
-        # if i is prime or not
-        flag = 1
-        for j in range(2, i // 2 + 1):
-            if (i % j == 0):
-                flag = 0
-                break
-
-        # flag = 1 means i is prime
-        # and flag = 0 means i is not prime
-        if (flag == 1):
-            primes.add(i)
-    return primes
